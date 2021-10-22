@@ -1,0 +1,56 @@
+.StyleCarousel img {
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: auto;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 1%;
+}
+
+.StyleCarousel {
+    position: relative;
+}
+
+.bottom-left {
+    position: absolute;
+    bottom: 30px;
+    left: 16px;
+    color: #6b6b6b;
+    font-size: 30px;
+}
+
+.bottom-left p {
+    font-size: 15px;
+}
+
+
+/* For the smartphones */
+@media screen and (max-width: 460px) {
+    .bottom-left p {
+        font-size: 10px;
+    }
+}
+
+/* For the tablets */
+@media screen and (min-width: 460px) and (max-width: 1024px) {
+    .bottom-left p {
+        font-size: 10px;
+    }
+}
+
+/* .StyleCarousel h3 {
+    color: rgb(0, 0, 0);
+    background: rgb(149, 230, 255);
+    opacity: 0.8;
+    border-radius: 50%;
+    font-weight: bold;
+} */
+
+
+/* .StyleCarousel p {
+    color: rgb(0, 0, 0);
+    background: rgb(219, 219, 219);
+    opacity: 0.8;
+    font-weight: bold;
+    border-radius: 50%;
+} */

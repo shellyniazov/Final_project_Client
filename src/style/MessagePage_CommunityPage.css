@@ -1,0 +1,473 @@
+/* ########################################### */
+/*            posts.html                       */
+/* ########################################### */
+
+/* posts table's head  */
+
+
+.posts-table {
+    margin-top: -1%;
+    margin-bottom: 9%;
+    padding: 50px;
+}
+
+
+.add {
+    margin-bottom: 17%;
+}
+
+.container {
+    margin: 20px;
+    padding: 20px;
+}
+
+.posts-table h6 {
+    text-decoration: none;
+    color: white;
+}
+
+.log Button {
+    margin-top: 3%;
+    background: #688cda;
+}
+
+.log h6 {
+    margin-top: 3%;
+    text-decoration: none;
+    color: white;
+
+}
+
+Button {
+    margin-bottom: 3%;
+}
+
+
+
+
+.table-head {
+    display: flex;
+}
+
+
+
+.table-head div {
+    padding: 5px;
+    margin: 2px;
+    border: 4px solid whitesmoke;
+    border-radius: 1%;
+}
+
+.table-head .status {
+    flex: 7%;
+}
+
+.table-head .subjects {
+    flex: 71%;
+}
+
+.table-head .replies {
+    flex: 5%;
+    align-items: center;
+    text-align: center;
+}
+
+.table-head .last-reply {
+    flex: 11%;
+}
+
+/* posts table's body  */
+
+.table-row {
+    display: flex;
+}
+
+.table-row .status,
+.table-row .subjects,
+.table-row .datePublish,
+.table-row .last-reply,
+.table-row .replies {
+    padding: 3px;
+    margin: 2px;
+    border: 2px solid rgb(228, 228, 228);
+    background: whitesmoke;
+    border-radius: 1%;
+    margin-bottom: 7px;
+}
+
+.status img {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 22px;
+    width: auto;
+    height: 38px;
+}
+
+.table-row .status {
+    flex: 76px;
+    font-size: 30px;
+    text-align: center;
+}
+
+.table-row .subjects {
+    flex: 70%;
+}
+
+.table-row .datePublish {
+    flex: 10%;
+    font-size: 14px;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+
+.table-row .replies {
+    flex: 3%;
+    font-size: 14px;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+
+.last-reply {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+.table-row .last-reply {
+    flex: 15%;
+}
+
+/* navigation path*/
+.navigate {
+    margin-block: 20px;
+    font-weight: lighter;
+    font-size: 24px;
+}
+
+.navigate a {
+    color: #fff;
+}
+
+.navigate a:hover {
+    color: #FF0042;
+    font-weight: bolder;
+}
+
+/* Pagination*/
+
+.pagination {
+    padding: 20px;
+    font-size: 15px;
+}
+
+
+.topic-container {
+    padding-bottom: 1%;
+}
+
+.pagination a {
+    color: #fff;
+    margin-inline: 5px;
+    padding: 5px 10px;
+    border: solid 0.5px #fff;
+}
+
+.pagination a:hover {
+    opacity: 0.5;
+}
+
+
+
+
+/* pop up add new topic */
+
+.window {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    background: white;
+}
+
+.window button {
+    margin: 5%;
+}
+
+.window .boxWin {
+    position: relative;
+    height: 65vh;
+}
+
+.window .boxWin:first-child {
+    background-image: url('/src/images/x1.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+.AddTopicPop {
+    margin-top: 2%;
+}
+
+
+.boxWin {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+}
+
+
+.AddTopicPop input {
+    width: 100%;
+    border-radius: 10%;
+    background-color: #dadada;
+    color: rgb(0, 0, 0);
+    padding: 8px 30px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.AddTopicPop textarea {
+    width: 100%;
+    height: 20vh;
+    border-radius: 10%;
+    background-color: #dadada;
+    color: rgb(0, 0, 0);
+    padding: 8px 30px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+
+.AddTopicPop ::placeholder {
+    font-size: 14px;
+}
+
+
+.imageTopicAdd p {
+    font-size: 25px;
+    letter-spacing: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: white;
+}
+
+
+
+@media(max-width:991px) {
+
+    .window {
+        grid-template-columns: 1fr;
+    }
+
+    .AddTopicPop {
+        margin-bottom: 15%;
+    }
+
+    .imageTopicAdd p {
+        font-size: 25px;
+    }
+
+    .AddTopicPop h3 {
+        font-size: 22px;
+    }
+
+}
+
+
+
+/* ########################################### */
+/*            detail.html                      */
+/* ########################################### */
+
+.formMessage {
+    margin: 20px;
+    padding: 20px;
+}
+
+
+.head {
+    display: flex;
+    padding: 5px;
+    font-weight: bold;
+    font-size: 15px;
+    padding: 5px;
+    border: 3px solid rgb(228, 228, 228);
+}
+
+.authors {
+    flex: 20%;
+    padding-left: 2%;
+    color: #6b6b6b;
+}
+
+.content {
+    flex: 80%;
+    background: rgb(255, 255, 255);
+    border: 2px solid rgb(228, 228, 228);
+    padding-left: 10px;
+    color: #6b6b6b;
+    border-radius: 1%;
+}
+
+.body {
+    display: flex;
+    border: 2px solid rgb(228, 228, 228);
+    background: whitesmoke;
+    padding: 10px;
+    margin-top: 5px;
+}
+
+.body .authors .username {
+    font-size: 20px;
+}
+
+
+
+.authors .date {
+    font-size: 13px;
+}
+
+.date p {
+    font-size: 12px;
+}
+
+
+
+.body .content .comment button {
+    border: none;
+    padding: 10px;
+    font-weight: bolder;
+    box-shadow: 4px 6px #fff;
+    cursor: pointer;
+    float: right;
+}
+
+/* comment section */
+.comment-area {
+    margin-bottom: 50px;
+}
+
+.comment-area textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 10px;
+    margin-block: 40px;
+    border: 3px solid rgb(228, 228, 228);
+}
+
+.comment-area input {
+    float: right;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.comment-area ::placeholder {
+    color: #6b6b6b;
+}
+
+.comment-area input:hover {
+    border: solid 1px #000000;
+}
+
+
+
+
+.formMessage button {
+    margin-top: -5%;
+}
+
+
+
+
+/* For the smartphones */
+@media screen and (max-width: 460px) {
+    .container .formMessage {
+        margin: 10px;
+        padding: 10px;
+    }
+}
+
+/* For the tablets */
+@media screen and (min-width: 460px) and (max-width: 1024px) {
+    .container .formMessage {
+        margin: 15px;
+        padding: 15px;
+    }
+}
+
+
+
+
+
+.titlePageMessage {
+    border: 5px solid whitesmoke;
+    border-radius: 3%;
+    padding-left: 2%;
+    padding-right: 2%;
+    align-items: center;
+    /* font-family: cursive; */
+    margin-bottom: 2%;
+    align-items: center;
+    height: 50px;
+}
+
+.titlePageMessage p {
+    margin-top: 5px;
+    color: lightseagreen;
+    font-size: 18px;
+}
+
+
+
+.titlePageCommunity {
+    border: 5px solid whitesmoke;
+    border-radius: 3%;
+    padding-left: 2%;
+    padding-right: 2%;
+    align-items: center;
+    /* font-family: cursive; */
+    margin-bottom: 2%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+}
+
+.titlePageCommunity button {
+    margin-top: 3%;
+}
+
+
+.titlePageCommunity p {
+    margin-top: 20px;
+    color: lightseagreen;
+    font-size: 18px;
+}
+
+.titlePageCommunity span {
+    color: #6b6b6b;
+    font-size: 15px;
+}
+
+@media(max-width:991px) {
+
+    .titlePageCommunity {
+        height: 85px;
+    }
+
+    .titlePageMessage {
+        height: 85px;
+    }
+}
