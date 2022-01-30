@@ -3,21 +3,119 @@ import React from 'react';
 import "bootstrap/dist/css/bootstrap.css";
 import '../style/login_page.css';
 import { useState } from "react";
-import { NavLink } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import { API } from '../API';
 import swal from 'sweetalert';
+import Modal from 'react-bootstrap/Modal'
 
+import IconButton from "@material-ui/core/IconButton";
+import InputLabel from "@material-ui/core/InputLabel";
+import Visibility from "@material-ui/icons/Visibility";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import Input from "@material-ui/core/Input";
 
 const Login = (props) => {
 
   const history = useHistory()
 
+  // for popup add topic close or open window
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+
   const [Email, setEmail] = useState('');
   const [Password, setPassword] = useState('');
 
+  const [Id, setId] = useState('');
 
 
+
+
+
+  // Initialize a boolean state
+  const [passwordShown, setPasswordShown] = useState(false);
+
+  // Password toggle handler
+  const togglePassword = () => {
+    // When the handler is invoked
+    // inverse the boolean state of passwordShown
+    setPasswordShown(!passwordShown);
+  };
+
+
+
+
+
+
+
+  //טיפול בשגיאות
+  const checkLogin = async () => {
+
+    if (Email == '' || Password == '') {
+      swal("Stop", "You need to fill in all the fields!", "warning");
+      return;
+    }
+
+    else {
+      loginUser();
+    }
+  }
+
+  // אם השדה ריק id טיפול בשגיאה בהכנסת 
+  const checkIdForget = async () => {
+
+    if (Id == '') {
+      swal("Stop", "You need to fill in the field!", "warning");
+      return;
+    }
+
+    else {
+      ForgetPassword();
+    }
+  }
+
+
+
+
+  //פונקציה שמטפלת במקרה אם משתמש שכח את הסיסמא שלו וייצור אחת חדשה 
+  const ForgetPassword = async () => {
+
+    try {
+      let user = { Id }
+
+      let res = await fetch(API.USERS.FORGET, {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(user)
+      });
+
+      let data = await res.json()
+
+      let u = JSON.parse(sessionStorage.getItem("user"));
+
+      if (u != null || u != undefined) { // אם יש משתמש מחובר אז לא ניתן לבצע התחברות חדשה
+        swal("Stop", "You need to logout first!", "warning");
+        return;
+      }
+
+      else {
+        history.push(`/updateNewPassword/${data.User_code}`); //מעבר לדף עדכון סיסמא חדשה אם שכח את הישנה
+        window.location.reload(false); // רענון דף
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+
+
+  // פונקציה שמטפלת בהתחברות המשתמש לאתר
   const loginUser = async () => {
 
     try {
@@ -34,21 +132,21 @@ const Login = (props) => {
       let data = await res.json()
       let u = JSON.parse(sessionStorage.getItem("user"));
 
-      if (u != null || u != undefined) {
+      if (u != null || u != undefined) { // אם יש משתמש מחובר אז לא ניתן לבצע התחברות חדשה
         swal("Stop", "You need to logout first!", "warning");
         return;
       }
 
-      if (data.UserType_code == 1) {
+      if (data.UserType_code == 1) { // מעבר לדף פרופיל של משתמש ספציפי
         sessionStorage.setItem("user", JSON.stringify(data))
         history.push(`/Profile/${data.User_code}`);
         window.location.reload(false); // רענון דף
       }
 
-      if (data.UserType_code == 2) {
+      if (data.UserType_code == 2) { // מעבר לדף מנהל האתר
         sessionStorage.setItem("user", JSON.stringify(data))
         history.push(`/Admin/${data.User_code}`);
-        window.location.reload(false); // רענון דף
+        window.location.reload(false);
       }
 
 
@@ -56,6 +154,23 @@ const Login = (props) => {
       console.log(error)
     }
   }
+
+
+
+  // פונקציה הבודקת אם המשתמש מחובר או לא כדי לדעת אם המשתמש זקוק להרשמה לאתר
+  const checkUserLogin = async () => {
+
+    let u = JSON.parse(sessionStorage.getItem("user"))
+
+    if (u != null || u != undefined) {
+      swal("Stop", "You need to Logout first!", "warning");
+    }
+    else {
+      history.push(`/Register`);
+    }
+  }
+
+
 
 
 
@@ -68,9 +183,9 @@ const Login = (props) => {
         <div className="box contect">
 
           <div className="log">
-            <h3>How good you are back to us!</h3>
+            <h3>How good you are back to us! 😎</h3>
+            <br></br>
 
-            <label for="fname">Email:</label><br />
             <input type="email"
               id="fname"
               name="fname"
@@ -79,23 +194,27 @@ const Login = (props) => {
               onChange={(event) => setEmail(event.target.value)} />
 
             <br></br>
-
-
-            <label for="fname">Password:</label><br />
-            <input type="password"
-              id="fname"
-              name="fname"
-              placeholder="Password"
-              value={Password}
-              onChange={(event) => setPassword(event.target.value)}
-            />
-
-
             <br></br>
 
-            <Button variant="primary" type="Login" onClick={loginUser}>
+
+            <div className='hidePass'>
+              <input type={passwordShown ? "text" : "password"}
+                id="fname"
+                name="fname"
+                placeholder="Password"
+                value={Password}
+                onChange={(event) => setPassword(event.target.value)}
+              />
+
+
+              <a onClick={togglePassword}><img src="https://img.icons8.com/ios-glyphs/30/000000/visible--v2.png"/></a>
+            </div>
+
+
+            <Button variant="primary" type="Login" onClick={checkLogin}>
               Login
             </Button>
+
 
 
             <Form.Text className="text-muted">
@@ -104,11 +223,47 @@ const Login = (props) => {
             </Form.Text>
 
 
-            {/* <Button variant="primary" type="Admin User">
-            <NavLink to="/admin"
-              style={{ textDecoration: "none", color: "white", fontSize: "14px" }}>
-              To admin account</NavLink>
-          </Button> */}
+            <a href="#" className="forget" onClick={handleShow}
+              style={{ textDecoration: "none", color: "black", borderBottom: "1px solid black", fontWeight: "bold", fontSize: "14px", }}
+            >Password Recovery</a>
+
+
+
+            <Modal show={show} onHide={handleClose} animation={true} size="lg"
+              aria-labelledby="contained-modal-title-vcenter"
+              centered
+            >
+
+              <section className="window1">
+
+                <div className="boxWin image">
+
+
+                </div>
+
+                <div className="boxWin contectWin">
+
+                  <div className="AddTopicPop">
+
+                    <label for="fname" style={{ fontFamily: "Verdana" }}>User Id :</label><br />
+                    <input type="text"
+                      required
+                      placeholder="User Id"
+                      value={Id}
+                      onChange={(event) => setId(event.target.value)}
+                    />
+
+                    <br></br>
+
+                    <Button variant="success" type="addTopic" onClick={checkIdForget}>
+                      Set Id
+                    </Button>
+
+                  </div>
+                </div>
+              </section>
+            </Modal>
+
 
           </div>
         </div>
@@ -125,19 +280,18 @@ const Login = (props) => {
               </Form.Text>
               <br></br>
 
-              <Button variant="primary" type="Login">
-                <NavLink to="/register"
-                  style={{ textDecoration: "none", color: "white", fontSize: "17px" }}>
-                  Register here!</NavLink>
+              <Button variant="primary"
+                type="Login"
+                onClick={checkUserLogin}
+                style={{ textDecoration: "none", color: "white", fontSize: "17px" }}>
+                Register here!
               </Button>
 
             </Form>
 
           </div>
         </div>
-
       </section>
-
     </div>
 
   );

@@ -1,4 +1,4 @@
-import { Card, CardColumns } from 'react-bootstrap'
+import { CardColumns } from 'react-bootstrap'
 import { NavLink } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { API } from '../API';
@@ -20,8 +20,6 @@ const Home = (props) => {
   }
 
 
-
-
   useEffect(() => {
 
     LoadCategories();
@@ -29,19 +27,16 @@ const Home = (props) => {
   }, [])
 
 
+
   return (
 
     <div >
 
       <div className="StyleCarousel">
-
         <img
           className="d-block w-100"
-          src={require("../images/home.jpg").default}
+          src={require("../images/homeee.png").default}
         />
-        {/* <div class="bottom-left"><p>Here you will find in every field a cluster you need ,
-          <br />And ask people any question you need and they will answer you .
-          <br />We are here to help you!</p></div> */}
       </div>
 
 
@@ -52,31 +47,41 @@ const Home = (props) => {
 
         {categories.map(category =>
 
+          <div className="NEWS1">
+            <div className="NEWScard">
+              <img src={category.Photo} />
+              <div className="top-left">
+                <NavLink to={`/CommunityPage/${category.Serial_code}`}
+                  style={{
+                    textDecoration: "none",
+                    color: "#fff",
+                    borderColor: "white",
+                    background: "#00000082",
+                    borderRadius: "8px 0px",
+                    borderTopLeftRadius: "14px",
+                    top: "0px",
+                    left: "0px",
+                    fontSize: "25px",
+                    borderBottom: "2px solid #fff",
+                    borderRight: "2px solid #fff",
+                    position: "absolute",
+                    padding: "4px",
+                    textShadow: "1px 0 0 #000, -1px 0 0 #000, 0 1px 0 #000, 0 -1px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000",
+                    fontFamily: "fantasy"
+                  }}
+                >{category.Name_category}</NavLink>
+              </div>
+            </div>
 
-          <Card>
-            <Card.Img variant="top" src="" height="150px" width="70px" border-radius="10%" />
-            <Card.ImgOverlay>
-
-              <Card.Title><NavLink to={`/CommunityPage/${category.Serial_code}`}
-                style={{ textDecoration: "none", color: "#28a745" }}
-              >{category.Name_category}</NavLink></Card.Title>
-              <Card.Text>
-
-              </Card.Text>
-            </Card.ImgOverlay>
-          </Card>
-
-        )}
+          </div>
+        )
+        }
 
       </CardColumns>
 
       <br></br>
       <br></br>
-      <br></br>
-      <br></br>
-
-
-    </div>
+    </div >
   );
 }
 

@@ -13,27 +13,27 @@ import swal from 'sweetalert';
 
 const CommunityPage = (props) => {
 
-    let history = useHistory();
 
     // for popup add topic close or open window
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-
-    const [TopicTitle, setTopicTitle] = useState('');
+    const [TopicTitle, setTopicTitle] = useState(''); //input
     const [TopicText, setTopicText] = useState('');
-    const [DatePublished, setDatePublished] = useState('');
 
-    const [titleCategory, SetTitleCategory] = useState({});
+    const [titleCategory, SetTitleCategory] = useState([]);
 
     const [topics, SetTopics] = useState([]);
+    //const [topicsDeleted, SetTopicsDeleted] = useState([]);
 
     let { id } = useParams();
     let Category_code = id;
 
 
 
+
+    // פונקציה הטוענת אשכול מסוים לפי קטגוריה מסוימת אליה הוא משתייך
     const LoadTopics = async () => {
 
         let res = await fetch(`${API.CATEGORIES.GET}/${id}/topics`, { method: 'GET' });
@@ -43,20 +43,45 @@ const CommunityPage = (props) => {
     }
 
 
+    // const LoadTopicsDeletedByCategory = async () => {
+
+    //     let res = await fetch(`${API.CATEGORIES.GET}/${id}/topicsDeletdByCategory`, { method: 'GET' });
+    //     let data = await res.json();
+
+    //     SetTopicsDeleted(data);
+    // }
+
+
+    // טיפול בשגיאות - אם השדות של הוספת אשכול ריקים
+    const checkTopic = async () => {
+
+        if (TopicTitle == '' || TopicText == '') {
+            swal("Stop", "You need to fill in all the fields!", "warning");
+            return;
+        }
+
+        else {
+            addTopic();
+        }
+    }
 
 
 
+    // פונקציה המטפלת בהוספת אשכול
     const addTopic = async () => {
         let userData = JSON.parse(sessionStorage.getItem("user"));
 
+        // אם המשתמש לא מחובר הוא לא יכול להוסיף אשכול
         if (userData == null || userData == undefined) {
             swal("Stop", "You need to sign in!", "warning");
         }
 
+
         try {
             let Publish_by = userData.User_code;
+
             swal("Added a topic successfully!", "", "success");
-            let d = new Date();
+            let d = new Date(); // הגדרת משתנה לתאריך
 
             let user = {
                 Category_code,
@@ -85,6 +110,7 @@ const CommunityPage = (props) => {
 
 
 
+    // פונקציה האחראית על הצגה של שם הקטגוריה הספציפית שרואים כעת את האשכולים שלה -> דף אשכול
     const LoadCategory = async () => {
 
         let res = await fetch(`${API.CATEGORIES.GET}/${id}`, { method: 'GET' });
@@ -98,6 +124,7 @@ const CommunityPage = (props) => {
     useEffect(() => {
         LoadTopics();
         LoadCategory();
+        //LoadTopicsDeletedByCategory();
     }, [])
 
 
@@ -107,25 +134,31 @@ const CommunityPage = (props) => {
 
         <div className="posts-table">
 
-            <div className="titlePageCommunity">
-                <p>
-                    <NavLink to={`/`}>
-                        <img src="https://img.icons8.com/material-outlined/24/000000/home--v2.png"
-                            style={{ margin: "5px", paddingBottom: "4px" }}
-                        />
-                    </NavLink>
+            {titleCategory.map(topic =>
 
-                    - Community Page {'> '}
+                <div className="titlePageCommunity">
+                    <p>
+                        <NavLink to={`/`}>
+                            <img src={require("../images/hhh.png").default}
+                                style={{ margin: "5px", paddingBottom: "4px" }}
+                                width="37"
+                                height="37"
+                                alt="Profile"
+                            />
+                        </NavLink>
 
-                    {titleCategory.Name_category}
-                </p>
+                          Community Page {'> '}
 
-                <Button variant="info" size="sm"
-                    onClick={handleShow}
-                    style={{ textDecoration: "none", color: "white", fontSize: "16px" }}>
-                    Add New Cluster
-                </Button>
-            </div>
+                        {topic.Name_category}
+                    </p>
+
+                    <Button variant="success" size="sm"
+                        onClick={handleShow}
+                        style={{ textDecoration: "none", color: "white", fontSize: "14px" }}>
+                        Add New Cluster
+                    </Button>
+                </div>
+            )}
 
 
             <Modal show={show} onHide={handleClose} animation={true} size="lg"
@@ -139,7 +172,7 @@ const CommunityPage = (props) => {
 
                         <div className="imageTopicAdd">
 
-                            <Form>
+                            <Form >
                                 <Form.Text className="text-muted1">
                                     <p>Create new Topic</p>
                                 </Form.Text>
@@ -154,7 +187,7 @@ const CommunityPage = (props) => {
 
                         <div className="AddTopicPop">
 
-                            <label for="fname" style={{ fontFamily: "monospace" }}>Topic Title :</label><br />
+                            <label for="fname" style={{ fontFamily: "Verdana" }}>Topic Title :</label><br />
                             <input type="text"
                                 required
                                 placeholder="Title"
@@ -164,7 +197,7 @@ const CommunityPage = (props) => {
 
                             <br></br>
 
-                            <label for="fname" style={{ fontFamily: "monospace" }}>Write Post :</label><br />
+                            <label for="fname" style={{ fontFamily: "Verdana" }}>Write Post :</label><br />
                             <textarea type="text"
                                 required
                                 placeholder="Post"
@@ -175,11 +208,8 @@ const CommunityPage = (props) => {
 
                             <br></br>
 
-                            {/* <Button variant="danger" onClick={handleClose}>
-                                Close
-                            </Button> */}
-
-                            <Button variant="success" type="addTopic" onClick={addTopic}>
+                            <Button variant="success" type="addTopic" onClick={checkTopic}
+                                style={{ fontFamily: "Verdana" }} >
                                 Add New Topic
                             </Button>
 
@@ -191,58 +221,109 @@ const CommunityPage = (props) => {
 
 
             <div className="table-head">
-                <div class="status"></div>
-                <div class="subjects">Topic's</div>
-                <div class="replies">Replies</div>
-                <div class="last-reply">Date Publish</div>
+                <div className="status">Users</div>
+                <div className="subjects">Topics</div>
+                <div className="replies">Replies</div>
+                <div className="last-reply">Date Publish</div>
             </div>
 
 
-            {topics.map(topic =>
 
-                <div className="table-row" >  {/* onload={LoadUsers(topic.Publish_by)} */}
+            {
+                topics.map(topic =>
 
-                    <div class="status">
-                        <img
-                            src={require("../images/p9.png").default}
-                            alt="Profile" />
+                    <div className="table-row" >
+
+                        <div className="status">
+                            <img
+                                src={topic.Photo}
+                                alt="Profile" />
+                        </div>
+
+                        <div className="subjects">
+
+                            <NavLink to=
+                                {`/MessagePage/${topic.Serial_code}`}
+                                style={{ textDecoration: "none", color: "green", fontSize: "18px" }}>
+                                {topic.Topic_title}
+                            </NavLink>
+                            <br />
+
+                            <span
+                                style={{ textDecoration: "none", color: "black", fontSize: "13px" }}>
+                                Started by
+                                <b> {topic.First_name} {topic.Last_name}</b>
+                            </span>
+                        </div>
+
+                        <div className="replies">
+                            {topic.Count_Comments}
+                        </div>
+
+                        <div className="datePublish">
+                            {topic.Date_published}
+                        </div>
+
                     </div>
+                )
 
-                    <div className="subjects">
-                        <NavLink to=
-                            {`/MessagePage/${topic.Serial_code}`}
-                            style={{ textDecoration: "none", color: "green", fontSize: "18px" }}>
-                            {topic.Topic_title}
-                        </NavLink>
+            }
 
-                        <br />
-                        <span
-                            style={{ fontSize: "14px" }}>
-                            {topic.Topic_text}
-                        </span>
-                        <br />
+            {
+                // topicsDeleted.map(topicsdeleted =>
 
-                        <span
-                            style={{ textDecoration: "none", color: "black", fontSize: "13px" }}>
-                            Started by
-                            <b> {topic.First_name} {topic.Last_name}</b>
-                        </span>
-                    </div>
+                //     <div className="table-row" >
 
-                    <div className="replies">
-                        {topic.Count_Comments}
-                    </div>
+                //         <div class="status">
+                //             <img
+                //                 src={topicsdeleted.Photo}
+                //                 alt="Profile" />
+                //         </div>
 
-                    <div className="datePublish">
-                        {topic.Date_published}
-                    </div>
+                //         <div className="subjects">
 
-                </div>
-            )}
-        </div>
+                //             <NavLink to=
+                //                 {`/MessagePage/${topicsdeleted.Serial_code}`}
+                //                 style={{ textDecoration: "none", color: "green", fontSize: "18px" }}>
+                //                 {topicsdeleted.Topic_title}
+                //             </NavLink>
+                //             <br />
 
+                //             <span
+                //                 style={{ textDecoration: "none", color: "black", fontSize: "13px" }}>
+                //                 Started by
+                //                 <b> {topicsdeleted.First_name} {topicsdeleted.Last_name}</b>
+                //             </span>
+                //         </div>
+
+                //         <div className="replies">
+                //             {topicsdeleted.Count_Comments}
+                //         </div>
+
+                //         <div className="datePublish">
+                //             {topicsdeleted.Date_published}
+                //         </div>
+
+                //     </div>
+                // )
+
+
+            }
+
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+
+        </div >
     );
 }
-
 
 export default CommunityPage;

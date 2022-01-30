@@ -3,29 +3,18 @@ import { Button, Form, Col, Row, Tab, Tabs, Table } from 'react-bootstrap'
 import { API } from '../API';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import Modal from 'react-bootstrap/Modal'
+import swal from 'sweetalert';
+
 
 
 const Admin = (props) => {
 
   let history = useHistory();
 
-
-
-  // for popup add topic close or open window
-  const [show, setShow] = useState(false);
-  const [show1, setShow1] = useState(false);
-  const [show2, setShow2] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleClose1 = () => setShow1(false);
-  const handleClose2 = () => setShow2(false);
-  const handleShow = () => setShow(true);
-  const handleShow1 = () => setShow1(true);
-  const handleShow2 = () => setShow2(true);
-
   const [NameCategory, setNameCategory] = useState('');
+  const [Photo, setPhoto] = useState('');
 
+  //הצגת משתנים בדף אדמין
   const [users, SetUsers] = useState([])
   const [catergories, setCatergories] = useState([]);
   const [topics, setTopics] = useState([]);
@@ -37,33 +26,12 @@ const Admin = (props) => {
   const [showDeletedComments, setDeletedComments] = useState([]);
 
 
-  //update props
-  const [UpdateNameCategory, setUpdateNameCategory] = useState('');
-
-  const [FirstName, setFirstName] = useState('');
-  const [LastName, setLastName] = useState('');
-  const [City, setCity] = useState('');
-  const [Birthday, setBirthday] = useState('');
-  const [Email, setEmail] = useState('');
-  const [Password, setPassword] = useState('');
-  const [ConfirmPassword, setConfirmPassword] = useState('');
-  const [Id, setId] = useState('');
-  const [file, setFile] = useState('');
-
-  const [Category_code, setCategoryCode] = useState('');
-  const [TopicTitle, setTopicTitle] = useState('');
-  const [TopicText, setTopicText] = useState('');
-  const [DatePublished, setDatePublished] = useState('');
-  const [Publish_by, setPublishBy] = useState('');
-
-
-
-
-
   let iUsers = 1;
   let iCatergories = 1;
   let iTopics = 1;
   let iComments = 1;
+
+
 
 
 
@@ -76,6 +44,7 @@ const Admin = (props) => {
   }
 
 
+
   const LoadCatergories = async () => {
 
     let res = await fetch(API.CATEGORIES.GET, { method: 'GET' });
@@ -85,6 +54,8 @@ const Admin = (props) => {
   }
 
 
+
+
   const LoadTopics = async () => {
 
     let res = await fetch(API.TOPICS.GET, { method: 'GET' });
@@ -92,6 +63,8 @@ const Admin = (props) => {
 
     setTopics(data);
   }
+
+
 
 
   const LoadComments = async () => {
@@ -114,6 +87,7 @@ const Admin = (props) => {
   }
 
 
+
   const LoadDeletedCategories = async () => {
 
     let res = await fetch(API.CATEGORIES.SHOW, { method: 'GET' });
@@ -121,6 +95,8 @@ const Admin = (props) => {
 
     setDeletedCategories(data);
   }
+
+
 
 
   const LoadDeletedTopics = async () => {
@@ -132,6 +108,8 @@ const Admin = (props) => {
   }
 
 
+
+
   const LoadDeletedComments = async () => {
 
     let res = await fetch(API.COMMENTS.SHOW, { method: 'GET' });
@@ -139,6 +117,8 @@ const Admin = (props) => {
 
     setDeletedComments(data);
   }
+
+
 
 
   //Delete Functions
@@ -168,63 +148,17 @@ const Admin = (props) => {
 
 
 
-  //Update Functions
-  const UpdateCategory = async (Id) => {
 
-    try {
-      let user = { Name_category: UpdateNameCategory }
-      let res = await fetch(`${API.CATEGORIES.GET}/update/${Id}`, {
-        method: 'PUT',
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(user)
-      });
-      let data = await res.json()
-      console.log(data)
-    } catch (error) {
-      console.log(error)
-    }
+  const ToUpdateUserPage = async (x) => {
+    history.push(`/UpdateUser/${x}`);
+  }
+
+  const ToUpdateCategoryPage = async (x) => {
+    history.push(`/UpdateCategory/${x}`);
   }
 
 
 
-  const UpdateUser = async (Id) => {
-
-    try {
-      let user = { FirstName, LastName, City, Birthday, Email, Password, Id, UserTypeCode: 1, Photo: null, ConfirmPassword }
-      let res = await fetch(`${API.USERS.GET}/update/${Id}`, {
-        method: 'PUT',
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(user)
-      });
-      let data = await res.json()
-      console.log(data)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-
-  const UpdateTopic = async (Category_code, Publish_by, Id) => {
-
-    try {
-      let user = { Category_code, TopicTitle, TopicText, DatePublished, Publish_by }
-      let res = await fetch(`${API.TOPICS.GET}/update/${Id}`, {
-        method: 'PUT',
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(user)
-      });
-      let data = await res.json()
-      console.log(data)
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
 
 
@@ -256,14 +190,18 @@ const Admin = (props) => {
 
 
 
-  // מחיקת כל הפרטים 
-  const clearAll = (event) => {
+
+  // התנתקות משתמש אדמין
+  const logout = (event) => {
     event.preventDefault(); //ביטול ניקוי הטופס באופן דיפולטיבי
     sessionStorage.clear();
 
     history.push("/");
     window.location.reload(false); // רענון דף
   }
+
+
+
 
   useEffect(() => {
     LoadUsers();
@@ -278,10 +216,51 @@ const Admin = (props) => {
 
 
 
-  const addCategoryAdmin = async () => {
 
+  const uploadImage = async () => {
     try {
-      let user = { Name_category: NameCategory }
+      const form = new FormData();
+      form.append("photo", Photo);
+      let res = await fetch(API.CATEGORIES.UPLOAD, {
+        method: 'POST',
+        body: form
+      });
+      let data = await res.json()
+      if (data.img) {
+        addCategoryAdmin(data.img)
+      }
+    } catch (error) {
+      swal(error, "", "error");
+    }
+  }
+
+
+
+
+  const checkAddCategoryFiled = async () => {
+
+    if (NameCategory == '' || !Photo) {
+      swal("Stop", "You need to fill in all the fields!", "warning");
+      return;
+    }
+
+    else {
+      uploadImage();
+      swal("Successfully added a category!", "", "success");
+      window.location.reload(false); // רענון דף
+    }
+  }
+
+
+
+
+
+  const addCategoryAdmin = async (img) => {
+    try {
+      let user = {
+        Name_category: NameCategory,
+        Photo: img
+      }
       let res = await fetch(API.CATEGORIES.ADD, {
         method: 'POST',
         headers: {
@@ -299,14 +278,14 @@ const Admin = (props) => {
 
 
 
-  return (
 
+  return (
 
     <div className="reg">
 
       <div className="titlePage">
         <p>Admin Page</p>
-        <Button variant="danger" size="sm" onClick={clearAll}>Log out</Button>
+        <Button variant="danger" size="sm" onClick={logout}>Log out</Button>
       </div>
 
 
@@ -335,7 +314,7 @@ const Admin = (props) => {
               <tbody>
                 <tr>
                   <td>{iUsers++}</td>
-                  <td>{user.Photo}</td>
+                  <td><img src={user.Photo} height="60px" width="60px"></img></td>
                   <td>{user.UserType_code}</td>
                   <td>{user.User_code}</td>
                   <td>{user.First_name}</td>
@@ -345,7 +324,7 @@ const Admin = (props) => {
                   <td>{user.Id}</td>
                   <td>{user.Email}</td>
                   <td>{user.User_password}</td>
-                  <td><Button variant="primary" size="sm" onClick={handleShow1} >Update</Button>{' '}</td>
+                  <td><Button variant="primary" size="sm" onClick={() => ToUpdateUserPage(user.User_code)}>Update</Button>{' '}</td>
                   <td><Button variant="danger" size="sm" onClick={() => DeleteUser(user.User_code)}>Delete</Button></td>
                 </tr>
               </tbody>
@@ -355,7 +334,7 @@ const Admin = (props) => {
               <tbody>
                 <tr>
                   <td>{iUsers++}</td>
-                  <td>{user.Photo}</td>
+                  <td><img src={user.Photo} height="60px" width="120px"></img></td>
                   <td>{user.UserType_code}</td>
                   <td>{user.User_code}</td>
                   <td>{user.First_name}</td>
@@ -368,171 +347,6 @@ const Admin = (props) => {
                   <td></td>
                   <td><Button variant="success" size="sm" onClick={() => ReactivateUser(user.User_code)}>Reactivate</Button></td>
                 </tr>
-
-
-                <Modal show={show1} onHide={handleClose1} animation={true} size="xl"
-                  aria-labelledby="contained-modal-title-vcenter"
-                  centered
-                >
-
-                  <section className="window">
-
-                    <div className="boxWin image">
-
-                      <div className="imageTopicAdd">
-
-                        <Form>
-
-                          <br></br>
-                        </Form>
-                      </div>
-                    </div>
-
-
-
-                    <div className="boxWin contectWin">
-
-                      <div className="AddTopicPop">
-
-                        <Form >
-
-                          <Row className="mb-3">
-
-                            <Form.Group as={Col} md="3" controlId="validationCustom01">
-                              <Form.Label>First name</Form.Label>
-                              <Form.Control
-                                required
-                                type="text"
-                                placeholder="First name"
-                                value={FirstName}
-                                onChange={(event) => setFirstName(event.target.value)}
-                              />
-                              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                            </Form.Group>
-
-
-                            <Form.Group as={Col} md="3" controlId="validationCustom02">
-                              <Form.Label>Last name</Form.Label>
-                              <Form.Control
-                                required
-                                type="text"
-                                placeholder="Last name"
-                                value={LastName}
-                                onChange={(event) => setLastName(event.target.value)}
-                              />
-                              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                            </Form.Group>
-
-
-
-                          </Row>
-
-                          <Row className="mb-3">
-
-                            <Form.Group as={Col} md="3" controlId="validationCustom03">
-                              <Form.Label>City</Form.Label>
-                              <Form.Control type="text"
-                                placeholder="City"
-                                value={City}
-                                onChange={(event) => setCity(event.target.value)}
-                                required />
-                              <Form.Control.Feedback type="invalid">
-                                Please provide a valid city.
-                              </Form.Control.Feedback>
-                            </Form.Group>
-
-
-                            <Form.Group as={Col} md="3" controlId="validationCustom04">
-                              <Form.Label>Birthday</Form.Label>
-                              <Form.Control
-                                placeholder="Birthday"
-                                value={Birthday}
-                                type="date"
-                                onChange={(event) => setBirthday(event.target.value)}
-                                required />
-                              <Form.Control.Feedback type="invalid">
-                                Please provide a valid state.
-                              </Form.Control.Feedback>
-                            </Form.Group>
-
-
-                            <Form.Group as={Col} md="4" controlId="validationCustom05">
-                              <Form.Label>Email</Form.Label>
-                              <Form.Control type="email"
-                                placeholder="Email"
-                                value={Email}
-                                onChange={(event) => setEmail(event.target.value)}
-                                required />
-                              <Form.Control.Feedback type="invalid">
-                                Please provide a valid zip.
-                              </Form.Control.Feedback>
-                            </Form.Group>
-
-
-                          </Row>
-
-                          <Row className="mb-3">
-
-                            <Form.Group as={Col} md="3" controlId="validationCustom05">
-                              <Form.Label>Password</Form.Label>
-                              <Form.Control type="password" placeholder="Password"
-                                value={Password}
-                                onChange={(event) => setPassword(event.target.value)}
-                                required />
-                              <Form.Control.Feedback type="invalid">
-                                Please provide a valid zip.
-                              </Form.Control.Feedback>
-                            </Form.Group>
-
-
-                            <Form.Group as={Col} md="3" controlId="validationCustom05">
-                              <Form.Label> Confirm password</Form.Label>
-                              <Form.Control type="password" placeholder="Confirm password"
-                                value={ConfirmPassword}
-                                onChange={(event) => setConfirmPassword(event.target.value)}
-                                required />
-                              <Form.Control.Feedback type="invalid">
-                                Please provide a valid zip.
-                              </Form.Control.Feedback>
-                            </Form.Group>
-
-
-                            <Form.Group as={Col} md="3" controlId="validationCustom05">
-                              <Form.Label>Id</Form.Label>
-                              <Form.Control type="number" placeholder="Id"
-                                value={Id}
-                                onChange={(event) => setId(event.target.value)}
-                                required />
-                              <Form.Control.Feedback type="invalid">
-                                Please provide a valid zip.
-                              </Form.Control.Feedback>
-                            </Form.Group>
-
-
-                            <Form.Group as={Col} md="4" className="mb-3">
-                              <br></br>
-                              <Form.Control type="file" value={file} onChange={(event) => setFile(event.target.value)} />
-                              <br></br>
-                              <Form.Check
-                                required
-                                label="Agree to terms and conditions"
-                                feedback="You must agree before submitting."
-                              />
-                            </Form.Group>
-                          </Row>
-                          <Button variant="success" type="addCategory" onClick={() => UpdateUser(user.User_code)} >
-                            Update User
-                          </Button>
-                        </Form>
-                        <br></br>
-                        <br></br>
-
-
-                      </div>
-                    </div>
-                  </section>
-                </Modal>
-
               </tbody>
             )}
           </Table>
@@ -546,10 +360,11 @@ const Admin = (props) => {
             <thead>
               <tr>
                 <th style={{ width: "19px" }}>#</th>
+                <th style={{ width: "40px" }}>Category photo</th>
                 <th style={{ width: "40px" }}>Serial code</th>
                 <th style={{ width: "40px" }}>Name category</th>
-                <th style={{ width: "20px" }}></th>
-                <th style={{ width: "20px" }}></th>
+                <th style={{ width: "40px" }}></th>
+                <th style={{ width: "40px" }}></th>
               </tr>
             </thead>
 
@@ -557,64 +372,18 @@ const Admin = (props) => {
               <tbody>
                 <tr>
                   <td>{iCatergories++}</td>
+                  <td><img src={category.Photo} height="60px" width="120px"></img></td>
                   <td>{category.Serial_code}</td>
                   <td>{category.Name_category}</td>
 
-                  <td><Button variant="primary" size="sm" onClick={() => handleShow()}>Update</Button>{' '}</td>
+                  <td><Button variant="primary" size="sm" onClick={() => ToUpdateCategoryPage(category.Serial_code)}>Update</Button></td>
                   <td><Button variant="danger" size="sm" onClick={() => DeleteCategory(category.Serial_code)}>Delete</Button></td>
                 </tr>
 
 
-                <Modal show={show} onHide={handleClose} animation={true} size="xl"
-                  aria-labelledby="contained-modal-title-vcenter"
-                  centered
-                >
-
-                  <section className="window">
-
-                    <div className="boxWin image">
-
-                      <div className="imageTopicAdd">
-
-                        <Form>
-                          <Form.Text className="text-muted1">
-                            <p>Create new Topic</p>
-                          </Form.Text>
-                          <br></br>
-                        </Form>
-                      </div>
-                    </div>
-
-
-
-                    <div className="boxWin contectWin">
-
-                      <div className="AddTopicPop">
-
-                        <label for="fname" style={{ fontFamily: "monospace" }}>Name Category :</label><br />
-                        <input type="text"
-                          required
-                          type="text"
-                          // placeholder="Add name category"
-                          value={UpdateNameCategory}
-                          onChange={(event) => setUpdateNameCategory(event.target.value)}
-                        />
-
-                        <br></br>
-                        <br></br>
-                        <Button variant="success" type="addCategory" onClick={() => UpdateCategory(category.Serial_code)} >
-                          Update Category
-                        </Button>
-
-                      </div>
-                    </div>
-                  </section>
-                </Modal>
 
               </tbody>
             )}
-
-
 
 
 
@@ -622,6 +391,7 @@ const Admin = (props) => {
               <tbody>
                 <tr>
                   <td>{iCatergories++}</td>
+                  <td><img src={category.Photo} height="60px" width="120px"></img></td>
                   <td>{category.Serial_code}</td>
                   <td>{category.Name_category}</td>
                   <td></td>
@@ -660,11 +430,14 @@ const Admin = (props) => {
                   <td>{topic.Topic_text}</td>
                   <td>{topic.Date_published}</td>
                   <td>{topic.Publish_by}</td>
-                  <td><Button variant="primary" size="sm" onClick={() => handleShow2()}>Update</Button>{' '}</td>
+
                   <td><Button variant="danger" size="sm" onClick={() => DeleteTopic(topic.Serial_code)}>Delete</Button></td>
                 </tr>
               </tbody>
             )}
+
+
+
             {showDeletedTopics.map(topic =>
               <tbody>
                 <tr>
@@ -678,78 +451,12 @@ const Admin = (props) => {
                   <td></td>
                   <td><Button variant="success" size="sm" onClick={() => ReactivateTopics(topic.Serial_code)}>Reactivate</Button></td>
                 </tr>
-
-
-
-                <Modal show={show2} onHide={handleClose2} animation={true} size="xl"
-                  aria-labelledby="contained-modal-title-vcenter"
-                  centered
-                >
-
-                  <section className="window">
-
-                    <div className="boxWin image">
-
-                      <div className="imageTopicAdd">
-
-                        <Form>
-
-                          <br></br>
-                        </Form>
-                      </div>
-                    </div>
-
-
-
-                    <div className="boxWin contectWin">
-
-                      <div className="AddTopicPop">
-
-                        <label for="fname" style={{ fontFamily: "monospace" }}>Topic Title :</label><br />
-                        <input type="text"
-                          required
-                          type="text"
-                          placeholder="Title"
-                          value={TopicTitle}
-                          onChange={(event) => setTopicTitle(event.target.value)}
-                        />
-
-                        <br></br>
-
-                        <label for="fname" style={{ fontFamily: "monospace" }}>Write Post :</label><br />
-                        <textarea type="text"
-                          placeholder="Post"
-                          value={TopicText}
-                          onChange={(event) => setTopicText(event.target.value)}
-                          required
-                        />
-
-                        <label for="fname" style={{ fontFamily: "monospace" }}>Date Published :</label><br />
-                        <input type="date"
-                          value={DatePublished}
-                          type="date"
-                          onChange={(event) => setDatePublished(event.target.value)}
-                          required
-                        />
-
-                        <br></br>
-
-
-                        <Button variant="success" type="addTopic" onClick={() => UpdateTopic(topic.Category_code, topic.Publish_by, topic.Serial_code)}>
-                          Update topic
-                        </Button>
-
-                      </div>
-                    </div>
-                  </section>
-                </Modal>
-
-
               </tbody>
             )}
 
           </Table>
         </Tab>
+
 
 
 
@@ -762,8 +469,8 @@ const Admin = (props) => {
                 <th style={{ width: "20px" }}>Topic number</th>
                 <th style={{ width: "230px" }}>Comment</th>
                 <th style={{ width: "60px" }}>Publish by-user code</th>
-                <th style={{ width: "40px" }}></th>
-                <th style={{ width: "30px" }}></th>
+                <th style={{ width: "10px" }}></th>
+                <th style={{ width: "10px" }}></th>
 
               </tr>
             </thead>
@@ -776,11 +483,12 @@ const Admin = (props) => {
                   <td>{comment.Topic_number}</td>
                   <td>{comment.Comment}</td>
                   <td>{comment.Publish_by}</td>
-                  <td><Button variant="primary" size="sm">Update</Button>{' '}</td>
                   <td><Button variant="danger" size="sm" onClick={() => DeleteComment(comment.Serial_code)}>Delete</Button></td>
+                  <td></td>
                 </tr>
               </tbody>
             )}
+
 
             {showDeletedComments.map(comment =>
               <tbody>
@@ -800,32 +508,48 @@ const Admin = (props) => {
 
 
 
+
         <Tab eventKey="Add Category" title="Add Category" style={{ marginBottom: "220px" }}>
 
-          <Form>
-            <Row className="mb-3">
-              <Form.Group as={Col} md="3" controlId="validationCustom01" style={{ fontWeight: "bold" }}>
-                <Form.Label>Name Category:</Form.Label>
-                <Form.Control
-                  required
-                  type="text"
-                  placeholder="Name Category"
-                  value={NameCategory}
-                  onChange={(event) => setNameCategory(event.target.value)}
-                />
-              </Form.Group>
-            </Row>
+          <div className="box">
 
-            <Button type="submit" onClick={addCategoryAdmin}>Add Category</Button>
-          </Form>
+            <div className="AddTopicPop">
+              <br></br>
+              <br></br>
 
+
+              <label for="fname" style={{ fontFamily: "Verdana" }}>Category Name :</label><br />
+              <input type="text"
+                required
+                placeholder="Name Category"
+                value={NameCategory}
+                onChange={(event) => setNameCategory(event.target.value)}
+              />
+
+              <br></br>
+
+              <label for="fname" style={{ fontFamily: "Verdana" }}>Category Image :</label><br />
+              <Form.Control
+                type="file"
+                onChange={(event) => setPhoto(event.target.files[0])}
+              />
+
+              <br></br>
+              <br></br>
+
+
+
+              <Button variant="success" type="addTopic" onClick={() => checkAddCategoryFiled()}>
+                Add Category
+              </Button>
+
+
+            </div>
+
+          </div>
         </Tab>
-
       </Tabs>
-
     </div>
-
-
   );
 }
 

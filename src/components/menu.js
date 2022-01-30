@@ -12,9 +12,12 @@ const Menu = () => {
   const [user, SetUser] = useState({})
   const history = useHistory()
 
+  let u = JSON.parse(sessionStorage.getItem("user")) //יצירת משתנה מהסאשיין על מנת להציג תמונה של משתמש ספציפי
 
 
-  const LoadUserName = async () => {
+
+
+  const LoadUser = async () => {
 
     let u = JSON.parse(sessionStorage.getItem("user"))
 
@@ -28,81 +31,168 @@ const Menu = () => {
 
 
 
-  const checkProfile = async () => {
+  const checkProfile = async () => { //אם המשתמש לא מחובר לא יוכל להיכנס לפרופיל ולהפך 
+
     let u = JSON.parse(sessionStorage.getItem("user"))
 
     if (u == null || u == undefined) {
       swal("Stop", "You need to login first!", "warning");
     }
     else {
-      history.push(`/Profile/${user.User_code}`);
+      history.push(`/Profile/${u.User_code}`);
     }
   }
 
 
+  const checkRegister = async () => { // אם המשתמש מחובר הוא לא יוכל לבצע הרשמה ולהפך
+
+    let u = JSON.parse(sessionStorage.getItem("user"))
+
+    if (u != null || u != undefined) {
+      swal("Stop", "You need to Logout first!", "warning");
+    }
+    else {
+      history.push(`/Register`);
+    }
+  }
+
 
   useEffect(() => {
-    LoadUserName();
+    LoadUser();
   }, [])
 
 
-  return (
-
-    <>
-      <Navbar style={{ background: "#f6f5fa" }} expand="lg">
-        <Navbar.Brand className="Logo"><Link to="/" style={{ textDecoration: "none" }}><h3>Forum<span>logo</span></h3></Link></Navbar.Brand>
-        <Navbar.Toggle aria-controls="navbarScroll" />
-        <Navbar.Collapse id="navbarScroll">
-          <Nav
-            className="mr-auto my-2 my-lg-0"
-            style={{ maxHeight: '100px' }}
-            navbarScroll
-          >
-
-            <div className="linksChoise">
-
-              <Button style={{ margin: "5px" }} variant="primary"><a href="https://www.facebook.com/" style={{ textDecoration: "none", color: "white", fontWeight: "bold" }}><p>Facebook</p></a></Button>{' '}
-
-              <Button style={{ margin: "5px" }} variant="outline-success"><Link to="/Login" style={{ textDecoration: "none", color: "black" }}><p>Login</p></Link></Button>{' '}
-
-              <Button style={{ margin: "5px" }} variant="outline-success"><Link to="/Register" style={{ textDecoration: "none", color: "black" }}><p>Register</p></Link></Button>{' '}
-
-            </div>
 
 
-          </Nav>
 
-          {/* <FormControl
-              type="search"
-              placeholder="Search"
-              className="mr-2"
-              aria-label="Search"
-            />
-            <Button variant="outline-success">Search</Button> */}
 
-          <Form className="d-flex">
-            <img
-              className="d-block w-100"
-              src={require("../images/user1.png").default}
-              width="33"
-              height="33"
-              style={{ cursor: "pointer" }}
-              className="d-inline-block align-top"
-              alt="Profile"
-              onClick={checkProfile}
-            />
+  if (u == null || u == undefined) { // אם אין משתמש מחובר מציגים את התמונת ברירת מחדל 
+    return (
 
-            <p
-              style={{ textDecoration: "none", color: "#6b6b6b", fontSize: "13px" }}>
+      <>
+        <Navbar style={{ background: "#f6f5fa" }} expand="lg">
+          <Navbar.Brand className="Logo">
+            <Link to="/" >
+              <img
+                className="d-block w-100"
+                src={require("../images/Logo.png").default}
+                style={{
+                  width: '58px',
+                  height: '58px'
+                }}
+              />
+            </Link>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="navbarScroll" />
+          <Navbar.Collapse id="navbarScroll">
+            <Nav
+              className="mr-auto my-2 my-lg-0"
+              style={{ maxHeight: '100px' }}
+              navbarScroll
+            >
+
+              <div className="linksChoise">
+
+                <Button style={{ margin: "5px" }} variant="primary"><a href="https://www.facebook.com/" style={{ textDecoration: "none", color: "white", fontWeight: "bold" }}><p>Facebook</p></a></Button>{' '}
+
+                <Button style={{ margin: "5px" }} variant="outline-success"><Link to="/Login" style={{ textDecoration: "none", color: "black" }}><p>Login</p></Link></Button>{' '}
+
+                <Button style={{ margin: "5px" }} variant="outline-success"><Link onClick={checkRegister} style={{ textDecoration: "none", color: "black" }}><p>Register</p></Link></Button>{' '}
+
+              </div>
+
+            </Nav>
+
+
+            <Form className="d-flex">
+              <img
+                className="d-block w-100"
+                src={require("../images/user1.png").default}
+                width="36"
+                height="36"
+                style={{ cursor: "pointer" }}
+                className="d-inline-block align-top"
+                alt="Profile"
+                onClick={checkProfile}
+              />
+
+            </Form>
+
+          </Navbar.Collapse>
+        </Navbar>
+      </>
+
+    );
+  }
+
+  else { // אם המשתמש מחובר - הצגת תמונה אישית
+
+    return (
+
+      <>
+        <Navbar style={{ background: "#f6f5fa" }} expand="lg">
+          <Navbar.Brand className="Logo">
+            <Link to="/" style={{ textDecoration: "none" }}>
+              <img
+                className="d-block w-100"
+                src={require("../images/Logo.png").default}
+                style={{
+                  width: '58px',
+                  height: '58px'
+                }}
+              />
+            </Link>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="navbarScroll" />
+          <Navbar.Collapse id="navbarScroll">
+            <Nav
+              className="mr-auto my-2 my-lg-0"
+              style={{ maxHeight: '100px' }}
+              navbarScroll
+            >
+
+              <div className="linksChoise">
+
+                <Button style={{ margin: "5px" }} variant="primary"><a href="https://www.facebook.com/" style={{ textDecoration: "none", color: "white", fontWeight: "bold" }}><p>Facebook</p></a></Button>{' '}
+
+                <Button style={{ margin: "5px" }} variant="outline-success"><Link to="/Login" style={{ textDecoration: "none", color: "black" }}><p>Login</p></Link></Button>{' '}
+
+                <Button style={{ margin: "5px" }} variant="outline-success"><Link onClick={checkRegister} style={{ textDecoration: "none", color: "black" }}><p>Register</p></Link></Button>{' '}
+
+              </div>
+
+
+            </Nav>
+
+
+            <Form className="d-flex" style={{ display: "flex", flexDirection: "column" }}>
+
+
+
+              <img
+                className="d-block w-100"
+                src={user.Photo}
+                width="50"
+                height="50"
+                style={{ cursor: "pointer", borderRadius: "50%", border: "2px solid grey" }}
+                className="d-inline-block align-top"
+                alt="Profile"
+                onClick={checkProfile}
+
+              />
               {user.First_name}
-            </p>
-          </Form>
 
-        </Navbar.Collapse>
-      </Navbar>
-    </>
 
-  );
+
+            </Form>
+
+          </Navbar.Collapse>
+        </Navbar>
+      </>
+
+    );
+  }
 }
+
 
 export default Menu;

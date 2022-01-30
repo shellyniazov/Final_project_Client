@@ -1,4 +1,4 @@
-import { Config } from "./Config"
+import { Config } from "./Config" // config ייבוא של כתובת השרת מדף 
 
 export const API = {
 
@@ -14,7 +14,9 @@ export const API = {
 
         REACTIVATE: `${Config.API.BASE}/api/categories/reactivate`,
 
-        SHOW: `${Config.API.BASE}/api/categories/show`
+        SHOW: `${Config.API.BASE}/api/categories/show`,
+
+        UPLOAD: `${Config.API.BASE}/api/categories/upload`
     },
 
     TOPICS: {
@@ -67,7 +69,11 @@ export const API = {
 
         SHOW: `${Config.API.BASE}/api/users/show`,
 
-        UPLOAD:`${Config.API.BASE}/api/users/upload`
+        UPLOAD: `${Config.API.BASE}/api/users/upload`,
+
+        FORGET: `${Config.API.BASE}/api/users/forget`,
+
+        UPDATE_PASSWORD: `${Config.API.BASE}/api/users/updatePassword`
     },
 
 

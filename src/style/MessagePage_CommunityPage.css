@@ -59,21 +59,21 @@ Button {
 }
 
 .table-head .status {
-    flex: 7%;
+    flex: 5%;
 }
 
 .table-head .subjects {
-    flex: 71%;
+    flex: 70%;
 }
 
 .table-head .replies {
-    flex: 5%;
+    flex: 7%;
     align-items: center;
     text-align: center;
 }
 
 .table-head .last-reply {
-    flex: 11%;
+    flex: 10%;
 }
 
 /* posts table's body  */
@@ -87,7 +87,7 @@ Button {
 .table-row .datePublish,
 .table-row .last-reply,
 .table-row .replies {
-    padding: 3px;
+    padding: 5px;
     margin: 2px;
     border: 2px solid rgb(228, 228, 228);
     background: whitesmoke;
@@ -96,21 +96,31 @@ Button {
 }
 
 .status img {
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 22px;
-    width: auto;
-    height: 38px;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
 }
 
 .table-row .status {
-    flex: 76px;
+    flex: 5%;
     font-size: 30px;
     text-align: center;
 }
 
+
 .table-row .subjects {
     flex: 70%;
+}
+
+
+
+.table-row .replies {
+    flex: 7%;
+    font-size: 14px;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    justify-content: center;
 }
 
 .table-row .datePublish {
@@ -122,15 +132,6 @@ Button {
     justify-content: center;
 }
 
-
-.table-row .replies {
-    flex: 3%;
-    font-size: 14px;
-    align-items: center;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-}
 
 
 .last-reply {
@@ -292,7 +293,7 @@ Button {
 
 .formMessage {
     margin: 20px;
-    padding: 20px;
+    padding: 70px;
 }
 
 
@@ -308,7 +309,13 @@ Button {
 .authors {
     flex: 20%;
     padding-left: 2%;
-    color: #6b6b6b;
+    color: #6b6b6bd2;
+}
+
+.authors img {
+    padding: 1%;
+    border-radius: 8%;
+    border: 4px solid rgb(222, 226, 226);
 }
 
 .content {
@@ -397,6 +404,12 @@ Button {
         margin: 10px;
         padding: 10px;
     }
+
+    .formMessage {
+        margin: 20px;
+        padding: 70px;
+    }
+
 }
 
 /* For the tablets */
@@ -411,29 +424,29 @@ Button {
 
 
 
+
 .titlePageMessage {
     border: 5px solid whitesmoke;
     border-radius: 3%;
     padding-left: 2%;
     padding-right: 2%;
     align-items: center;
-    /* font-family: cursive; */
+    margin-top: -3%;
     margin-bottom: 2%;
     align-items: center;
     height: 50px;
 }
 
 .titlePageMessage p {
-    margin-top: 5px;
     color: lightseagreen;
     font-size: 18px;
 }
 
 
-
 .titlePageCommunity {
-    border: 5px solid whitesmoke;
-    border-radius: 3%;
+    /* background: whitesmoke url(../images/12.jpg) no-repeat center center; */
+  
+    border-radius: 1%;
     padding-left: 2%;
     padding-right: 2%;
     align-items: center;
@@ -442,18 +455,31 @@ Button {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 50px;
+    height: 80px;
+    filter: drop-shadow(8px 8px 10px #ffffff);
+    object-fit: cover;
+    
 }
 
 .titlePageCommunity button {
-    margin-top: 3%;
+    margin-top: 44px;
+    margin-left: 35px;
+    border-radius: 5px;
+    border: 2px solid #f6f5fa;
+    font-family: Verdana;
 }
 
 
 .titlePageCommunity p {
-    margin-top: 20px;
-    color: lightseagreen;
+    margin-top: 19px;
+    font-family: Verdana;
+    color: rgb(97, 89, 89);
     font-size: 18px;
+    background: rgba(255, 255, 255, 0.678);
+    border: 2px solid #f6f5fa;
+    width: 100%;
+    border-radius: 5px;
+    filter: drop-shadow(8px 8px 10px gray);
 }
 
 .titlePageCommunity span {
@@ -470,4 +496,23 @@ Button {
     .titlePageMessage {
         height: 85px;
     }
+
+    .titlePageCommunity button {
+        margin-bottom: 33px;
+    }
 }
+
+
+.connectuser {
+    font-size: 18px;
+    margin-top: 3%;
+    margin-bottom: -3%;
+}
+
+.connectuser a {
+    color: lightseagreen;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+

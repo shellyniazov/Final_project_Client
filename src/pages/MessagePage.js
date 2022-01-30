@@ -7,14 +7,24 @@ import { NavLink } from 'react-router-dom';
 import swal from 'sweetalert';
 
 
+
 const MessagePage = (props) => {
 
     let history = useHistory();
 
     const [topics, SetTopics] = useState([])
-    const [comments, SetComments] = useState([])
-    const [comment, SetComment] = useState('')
+    //const [mainTopicDeleted, SetMainTopicDeleted] = useState([]) // הצגת אשכול/הודעה ראשית שנמחקה
+    const [comments, SetComments] = useState([]) //הצגת תגובות
+    const [comment, SetComment] = useState('') //הוספת תגובה
+    //const [commentsDeleted, SetCommentsDeleted] = useState([]) //הצגת תגובות מחוקות
+
+
     let { id } = useParams();
+
+
+    let u = JSON.parse(sessionStorage.getItem("user"));
+
+
 
 
     const LoadTopics = async () => {
@@ -26,6 +36,18 @@ const MessagePage = (props) => {
     }
 
 
+
+
+    // const LoadMainTopicDeleted = async () => {
+
+    //     let res = await fetch(`${API.TOPICS.GET}/${id}/MainTopicDeleted`, { method: 'GET' });
+    //     let data = await res.json();
+
+    //     SetMainTopicDeleted(data);
+    // }
+
+
+
     const LoadComments = async () => {
 
         let res = await fetch(`${API.COMMENTS.GET}/${id}/comments`, { method: 'GET' });
@@ -33,6 +55,32 @@ const MessagePage = (props) => {
 
         SetComments(data);
     }
+
+
+
+    // const LoadCommentsDeletedByTopic = async () => {
+
+    //     let res = await fetch(`${API.COMMENTS.GET}/${id}/commentsDeletedByTopic`, { method: 'GET' });
+    //     let data = await res.json();
+
+    //     SetCommentsDeleted(data);
+    // }
+
+
+
+    const checkComment = async () => {
+
+        if (comment == '') {
+            swal("Stop", "You need to add a comment!", "warning");
+            return;
+        }
+
+        else {
+            addComment();
+        }
+    }
+
+
 
 
 
@@ -64,9 +112,10 @@ const MessagePage = (props) => {
                 },
                 body: JSON.stringify(user)
             });
+            window.location.reload(false); // רענון דף
             let data = await res.json()
             console.log(data)
-            SetComments(prev => [...prev, data]);//עדכון אוטומטי
+            
         } catch (error) {
             console.log(error)
         }
@@ -78,108 +127,339 @@ const MessagePage = (props) => {
     useEffect(() => {
         LoadTopics();
         LoadComments();
+        //LoadMainTopicDeleted();
+        //LoadCommentsDeletedByTopic();
     }, [])
 
 
 
-    return (
 
-        <div className="formMessage">
+    if (u != null || u != undefined) {
+        return (
 
-            {topics.map(topic =>
-
-                <div className="titlePageMessage">
-                    <p >
-                        <NavLink to={`/`}
-                            style={{ textDecoration: "none", color: "#6b6b6b" }}>
-                            <img src="https://img.icons8.com/material-outlined/24/000000/home--v2.png"
-                                style={{ paddingBottom: "4px", margin: "5px" }} />
-                        </NavLink>
-
-                        <NavLink to={`/CommunityPage/${topic.Category_code}`}
-                            style={{ textDecoration: "none", color: "#6b6b6b" }}>
-                            <a target="_blank">- Community Page - </a>
-                        </NavLink>
-
-                        Message Page {'> '}
-
-                        {topic.Topic_title}
-                    </p>
-                </div>
-            )}
-
-            <div className="topic-container">
-
-                <div className="head">
-
-                    <div className="authors">Author</div>
-                    <div className="content">Topic : random topic</div>
-
-                </div>
+            <div className="formMessage">
 
                 {topics.map(topic =>
+
+                    <div className="titlePageMessage">
+                        <p >
+                            <NavLink to={`/`}>
+                                <img src={require("../images/hhh.png").default}
+                                    style={{ margin: "5px", paddingBottom: "4px" }}
+                                    width="37"
+                                    height="37"
+                                    alt="Profile"
+                                />
+                            </NavLink>
+
+
+                            <NavLink to={`/CommunityPage/${topic.Category_code}`}
+                                style={{ textDecoration: "none", color: "#6b6b6b" }}>
+                                <a target="_blank">  Community Page {'> '} </a>
+                            </NavLink>
+
+                            Message Page {'> '}
+
+                            {topic.Topic_title}
+                        </p>
+                    </div>
+                )}
+
+                <div className="topic-container">
+
+                    <div className="head">
+
+                        <div className="authors">Author</div>
+                        <div className="content">Topic: random topic</div>
+
+                    </div>
+
+
+                 
+                    {topics.map(topic =>
+                        <div className="body">
+
+                            <div className="authors">
+                                {/* מעבר לדף פרטי משתמש ע"י לחיצה על תמונה של הודעה ראשית */}
+                                <NavLink to={`/UserInfo/${topic.Publish_by}`}>
+                                    <img src={topic.Photo} alt="" height="140px" width="110" />
+                                </NavLink>
+
+                                <div className="username"
+                                    style={{ textDecoration: "none", color: "#28a745", fontSize: "17px" }}>
+                                    {topic.First_name} {topic.Last_name}, {topic.City}</div>
+
+                                <div className="date"
+                                    style={{ textDecoration: "none", color: "#6b6b6b" }}>
+                                    Date Publish: <p>{topic.Date_published}</p></div>
+
+                            </div>
+
+                            <div className="content">
+                                {topic.Topic_text}
+                            </div>
+
+                        </div>
+                    )}
+
+
+
+                    {/* {mainTopicDeleted.map(maintopicdeleted => {
+
+                            <div className="body">
+
+                                <div className="authors">
+
+                                    <NavLink to={`/UserInfo/${maintopicdeleted.Publish_by}`}>
+                                        <img src={maintopicdeleted.Photo} alt="" height="140px" width="110" />
+                                    </NavLink>
+
+                                    <div className="username"
+                                        style={{ textDecoration: "none", color: "#28a745", fontSize: "17px" }}>
+                                        {maintopicdeleted.First_name} {maintopicdeleted.Last_name}, {maintopicdeleted.City}</div>
+
+                                    <div className="date"
+                                        style={{ textDecoration: "none", color: "#6b6b6b" }}>
+                                        Date Publish: <p>{maintopicdeleted.Date_published}</p></div>
+
+                                </div>
+
+                                <div className="content">
+                                    {maintopicdeleted.Topic_text}
+                                </div>
+
+                            </div>
+                        
+                    } */}
+
+
+                </div>
+
+
+
+                {comments.map(comment =>
                     <div className="body">
 
                         <div className="authors">
-                            <img src="" alt="" height="100px" width="100" border-radius="10%" />
+                            <div className="username">
+                                {/* מעבר לדף פרטי משתמש ע"י לחיצה על תמונה של תגובה  */}
+                                <NavLink to={`/UserInfo/${comment.Publish_by}`}>
+                                    <img src={comment.Photo} alt="" height="140px" width="110" />
+                                </NavLink>
+                                <div className="username"
+                                    style={{ textDecoration: "none", color: "#6b6b6b", fontSize: "15px" }}>
+                                    {comment.First_name} {comment.Last_name}, {comment.City} </div>
 
-                            <div className="username"
-                                style={{ textDecoration: "none", color: "lightseagreen", fontSize: "17px" }}>
-                                Name User : {topic.First_name} {topic.Last_name}</div>
-
-                            <div className="date">Date Publish : <p>{topic.Date_published}</p></div>
-
+                                <div className="date">Date Publish: <p>{comment.Date_published}</p></div>
+                            </div>
                         </div>
 
                         <div className="content">
-                            {topic.Topic_text}
+                            {comment.Comment}
                         </div>
-
                     </div>
                 )}
-            </div>
 
 
+                {/* {commentsDeleted.map(commentdeleted => {
 
+                    <div class="body">
 
-            {comments.map(comment =>
-                <div class="body">
+                        <div class="authors">
+                            <div class="username">
+                                <NavLink to={`/UserInfo/${commentdeleted.Publish_by}`}>
+                                    <img src={commentdeleted.Photo} alt="" height="140px" width="110" />
+                                </NavLink>
+                                <div className="username"
+                                    style={{ textDecoration: "none", color: "#6b6b6b", fontSize: "15px" }}>
+                                    {commentdeleted.First_name} {commentdeleted.Last_name}, {commentdeleted.City} </div>
 
-                    <div class="authors">
-                        <div class="username">
-                            <img src="" alt="" height="100px" width="100" border-radius="10%" />
+                                <div className="date">Date Publish: <p>{commentdeleted.Date_published}</p></div>
+                            </div>
+                        </div>
 
-                            <div className="username"
-                                style={{ textDecoration: "none", color: "green", fontSize: "17px" }}>
-                                Name User : {comment.Publish_by}</div>
-
-                            <div className="date">Date Publish : <p>{comment.Date_published}</p></div>
-
+                        <div class="content">
+                            {commentdeleted.Comment}
                         </div>
                     </div>
+                } */}
 
-                    <div class="content">
-                        {comment.Comment}
+
+
+
+
+
+                <div className="comment-area hide" id="comment-area" >
+                    <textarea name="comment" id="" placeholder="comment here ... "
+                        value={comment}
+                        onChange={(event) => SetComment(event.target.value)}></textarea>
+                </div>
+
+                <Button variant="success" onClick={checkComment}>
+                    Send Message
+                </Button>
+
+            </div>
+        );
+    }
+
+
+    else {
+        return (
+
+            <div className="formMessage">
+
+                {topics.map(topic =>
+
+                    <div className="titlePageMessage">
+                        <p >
+                            <NavLink to={`/`}>
+                                <img src={require("../images/hhh.png").default}
+                                    style={{ margin: "5px", paddingBottom: "4px" }}
+                                    width="37"
+                                    height="37"
+                                    alt="Profile"
+                                />
+                            </NavLink>
+
+                            <NavLink to={`/CommunityPage/${topic.Category_code}`}
+                                style={{ textDecoration: "none", color: "#6b6b6b" }}>
+                                <a target="_blank">  Community Page {'> '} </a>
+                            </NavLink>
+
+                            Message Page {'> '}
+
+                            {topic.Topic_title}
+                        </p>
+                    </div>
+                )}
+
+                <div className="topic-container">
+
+                    <div className="head">
+
+                        <div className="authors">Author</div>
+                        <div className="content">Topic: random topic</div>
+
                     </div>
 
+                    {topics.map(topic =>
+                        <div className="body">
+
+                            <div className="authors">
+
+                                <NavLink to={`/UserInfo/${topic.Publish_by}`}>
+                                    <img src={topic.Photo} alt="" height="140px" width="110" />
+                                </NavLink>
+
+                                <div className="username"
+                                    style={{ textDecoration: "none", color: "#28a745", fontSize: "17px" }}>
+                                    {topic.First_name} {topic.Last_name}, {topic.City}</div>
+
+                                <div className="date"
+                                    style={{ textDecoration: "none", color: "#6b6b6b" }}>
+                                    Date Publish: <p>{topic.Date_published}</p></div>
+
+                            </div>
+
+                            <div className="content">
+                                {topic.Topic_text}
+                            </div>
+
+                        </div>
+                    )}
+
+
+
+
+                    {/* {mainTopicDeleted.map(maintopicdeleted =>
+                        <div className="body">
+
+                            <div className="authors">
+
+                                <NavLink to={`/UserInfo/${maintopicdeleted.Publish_by}`}>
+                                    <img src={maintopicdeleted.Photo} alt="" height="140px" width="110" />
+                                </NavLink>
+
+                                <div className="username"
+                                    style={{ textDecoration: "none", color: "#28a745", fontSize: "17px" }}>
+                                    {maintopicdeleted.First_name} {maintopicdeleted.Last_name}, {maintopicdeleted.City}</div>
+
+                                <div className="date"
+                                    style={{ textDecoration: "none", color: "#6b6b6b" }}>
+                                    Date Publish: <p>{maintopicdeleted.Date_published}</p></div>
+
+                            </div>
+
+                            <div className="content">
+                                {maintopicdeleted.Topic_text}
+                            </div>
+
+                        </div>
+                    )} */}
+
+
                 </div>
-            )}
+
+
+                {comments.map(comment =>
+                    <div className="body">
+
+                        <div className="authors">
+                            <div className="username">
+                                <NavLink to={`/UserInfo/${comment.Publish_by}`}>
+                                    <img src={comment.Photo} alt="" height="140px" width="110" />
+                                </NavLink>
+                                <div className="username"
+                                    style={{ textDecoration: "none", color: "#6b6b6b", fontSize: "15px" }}>
+                                    {comment.First_name} {comment.Last_name}, {comment.City} </div>
+
+                                <div className="date">Date Publish: <p>{comment.Date_published}</p></div>
+                            </div>
+                        </div>
+
+                        <div className="content">
+                            {comment.Comment}
+                        </div>
+                    </div>
+                )}
 
 
 
-            <div class="comment-area hide" id="comment-area" >
-                <textarea name="comment" id="" placeholder="comment here ... "
-                    value={comment}
-                    onChange={(event) => SetComment(event.target.value)}></textarea>
+
+                {/* 
+                {/* {commentsDeleted.map(commentdeleted =>
+                    <div className="body">
+
+                        <div className="authors">
+                            <div className="username">
+                                <NavLink to={`/UserInfo/${commentdeleted.Publish_by}`}>
+                                    <img src={commentdeleted.Photo} alt="" height="140px" width="110" />
+                                </NavLink>
+                                <div className="username"
+                                    style={{ textDecoration: "none", color: "#6b6b6b", fontSize: "15px" }}>
+                                    {commentdeleted.First_name} {commentdeleted.Last_name}, {commentdeleted.City} </div>
+
+                                <div className="date">Date Publish: <p>{commentdeleted.Date_published}</p></div>
+                            </div>
+                        </div>
+
+                        <div className="content">
+                            {commentdeleted.Comment}
+                        </div>
+                    </div> 
+                )}  */}
+
+
+                <div className="connectuser">
+                    <p>You need to <a href="/Login">login</a> or <a href="/Register">register</a> to post a comment.</p>
+                </div>
+
+
             </div>
+        );
 
-            <Button variant="success" onClick={addComment}>
-                Send Message
-            </Button>
-
-
-        </div>
-    );
+    }
 }
 
 export default MessagePage;

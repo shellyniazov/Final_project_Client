@@ -11,7 +11,7 @@
     padding-left: 2%;
     padding-right: 2%;
     align-items: center;
-    /* font-family: cursive; */
+    font-family: Verdana;
     margin-bottom: 5%;
     display: flex;
     justify-content: space-between;
@@ -20,9 +20,7 @@
 
 }
 
-.titlePageRegister button {
-    margin-top: 3%;
-}
+
 
 
 .titlePageRegister p {
@@ -38,4 +36,8 @@
         height: 70px;
     }
 
+}
+
+.sub button{
+    font-family: Verdana;
 }
