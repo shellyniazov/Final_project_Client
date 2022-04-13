@@ -4,6 +4,7 @@ import { API } from '../API';
 import { useHistory } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal'
 import { Button, Form, Col, Row, Tab, Tabs, Table } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 import swal from 'sweetalert';
 
 
@@ -30,7 +31,7 @@ const Profile = (props) => {
     const [Id, setId] = useState('');
     const [file, setFile] = useState('');
 
-    const [showDeletedTopics, setDeletedTopics] = useState([]);
+    
 
     //הצגת אשכולים ותגובות לכל משתמש ספציפי
     const [topics, setTopics] = useState([]);
@@ -120,7 +121,7 @@ const Profile = (props) => {
 
 
 
-
+    // משפיע על השדות בתהליך העדכון של פרטי המשתמש בפרופיל
     const handleFormSubmit = (e) => {
 
         e.preventDefault(); //אירועים לא פועלים בו זמנית - אירוע סינתטי
@@ -181,10 +182,10 @@ const Profile = (props) => {
             swal("You have successfully updated user details!", "", "success");
             console.log(data)
 
-            sessionStorage.clear();
+            sessionStorage.clear(); //מנתק את המשתמש מהפרופיל לאחר העדכון
 
             history.push("/");
-            window.location.reload(false); // רענון דף
+            window.location.reload(false); //רענון דף
 
         } catch (error) {
             console.log(error)
@@ -210,11 +211,9 @@ const Profile = (props) => {
 
 
 
-    // מחיקת כל הפרטים 
+    // התנתקות משתמש 
     const clearAll = (event) => {
-        event.preventDefault(); //ביטול ניקוי הטופס באופן דיפולטיבי
         sessionStorage.clear();
-
         history.push("/");
         window.location.reload(false); // רענון דף
     }
@@ -226,10 +225,18 @@ const Profile = (props) => {
     }
 
 
+    // מעביר אותנו לדף עדכון אשכול ע"י מספר אשכול
     const ToUpdateTopicPage = async (x) => {
         history.push(`/UpdateTopic/${x}`);
     }
 
+
+
+    const toMessagePage = async (id) => { // מעבר לדף נושא ספציפי מדף פרופיל למטה בטבלה
+
+          history.push(`/MessagePage/${id}`);
+      }
+    
 
 
 
@@ -241,7 +248,7 @@ const Profile = (props) => {
     }, [])
 
 
-    useEffect(() => { //נוצרו על מנת להציג משתנים באינפוטים בעדכון פרטי משתמש ספציפי
+    useEffect(() => { //נוצרו על מנת להציג משתנים באינפוטים - בשדות בעדכון פרטי משתמש ספציפי
         setFirstName(user.First_name)
         setLastName(user.Last_name)
         setCity(user.City)
@@ -278,7 +285,7 @@ const Profile = (props) => {
                                     <img src={user.Photo} alt="Admin" class="rounded-circle" width="150" />
                                     <div class="mt-3">
                                         <h4>Hi {user.First_name}</h4>
-                                        <Button className="adminBtn" variant="info" size="sm" onClick={checkAdmin}>Admin Page</Button>
+                                        <Button className="adminBtn" variant="info" size="sm" onClick={checkAdmin}>To Admin Page</Button>
                                     </div>
                                 </div>
                             </div>
@@ -534,7 +541,7 @@ const Profile = (props) => {
                                         <td>{iTopics++}</td>
                                         <td>{topic.Serial_code}</td>
                                         <td>{topic.Category_code}</td>
-                                        <td>{topic.Topic_title}</td>
+                                        <td><Link onClick={() => toMessagePage(topic.Serial_code)} style={{ textDecoration: "none", color: "#28a745", fontWeight: "bold" }}>{topic.Topic_title}</Link></td>
                                         <td>{topic.Topic_text}</td>
                                         <td>{topic.Date_published}</td>
                                         <td>{topic.Publish_by}</td>
@@ -854,7 +861,7 @@ const Profile = (props) => {
                                         <td>{iTopics++}</td>
                                         <td>{topic.Serial_code}</td>
                                         <td>{topic.Category_code}</td>
-                                        <td>{topic.Topic_title}</td>
+                                        <td><Link onClick={() => toMessagePage(topic.Serial_code)} style={{ textDecoration: "none", color: "#28a745", fontWeight: "bold" }}>{topic.Topic_title}</Link></td>
                                         <td>{topic.Topic_text}</td>
                                         <td>{topic.Date_published}</td>
                                         <td>{topic.Publish_by}</td>

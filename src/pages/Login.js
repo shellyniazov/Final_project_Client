@@ -8,12 +8,7 @@ import { API } from '../API';
 import swal from 'sweetalert';
 import Modal from 'react-bootstrap/Modal'
 
-import IconButton from "@material-ui/core/IconButton";
-import InputLabel from "@material-ui/core/InputLabel";
-import Visibility from "@material-ui/icons/Visibility";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import Input from "@material-ui/core/Input";
+
 
 const Login = (props) => {
 
@@ -37,7 +32,7 @@ const Login = (props) => {
   // Initialize a boolean state
   const [passwordShown, setPasswordShown] = useState(false);
 
-  // Password toggle handler
+  // פונקציה המאפשרת להשפיע על ההצגה של הסיסמא כטקסט או נקודות
   const togglePassword = () => {
     // When the handler is invoked
     // inverse the boolean state of passwordShown
@@ -62,6 +57,7 @@ const Login = (props) => {
       loginUser();
     }
   }
+
 
   // אם השדה ריק id טיפול בשגיאה בהכנסת 
   const checkIdForget = async () => {
@@ -129,7 +125,7 @@ const Login = (props) => {
         body: JSON.stringify(user)
       });
 
-      let data = await res.json()
+      let data = await res.json() // ממיר את הres לאובייקט json
       let u = JSON.parse(sessionStorage.getItem("user"));
 
       if (u != null || u != undefined) { // אם יש משתמש מחובר אז לא ניתן לבצע התחברות חדשה
@@ -137,6 +133,8 @@ const Login = (props) => {
         return;
       }
 
+
+      // אם המשתמש לא מחובר - ניתן לבצע התחברות - לפי סוג משתמש
       if (data.UserType_code == 1) { // מעבר לדף פרופיל של משתמש ספציפי
         sessionStorage.setItem("user", JSON.stringify(data))
         history.push(`/Profile/${data.User_code}`);

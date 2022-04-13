@@ -4,7 +4,7 @@ import React from 'react';
 import './style_componets/footer.css';
 import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router-dom';
-import swal from 'sweetalert';
+import swal from 'sweetalert'; // popup 
 
 const Footer = () => {
 
@@ -56,7 +56,7 @@ const Footer = () => {
 						/>
 					</Link>
 
-					<p className="footer-company-name">Forum © 2021</p>
+					<p className="footer-company-name">Made by Artium and Shelly © 2022</p>
 				</div>
 
 

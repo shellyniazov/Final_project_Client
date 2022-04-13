@@ -259,7 +259,7 @@ const UpdateUser = (props) => {
                     </Row>
 
 
-                    <Button variant="success" type="addTopic" >
+                    <Button variant="success" >
                         Update User
                     </Button>
 

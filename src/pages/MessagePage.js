@@ -12,11 +12,10 @@ const MessagePage = (props) => {
 
     let history = useHistory();
 
-    const [topics, SetTopics] = useState([])
-    //const [mainTopicDeleted, SetMainTopicDeleted] = useState([]) // הצגת אשכול/הודעה ראשית שנמחקה
+    const [topics, SetTopics] = useState([])//הצגת כותרת 
     const [comments, SetComments] = useState([]) //הצגת תגובות
     const [comment, SetComment] = useState('') //הוספת תגובה
-    //const [commentsDeleted, SetCommentsDeleted] = useState([]) //הצגת תגובות מחוקות
+    
 
 
     let { id } = useParams();
@@ -38,14 +37,6 @@ const MessagePage = (props) => {
 
 
 
-    // const LoadMainTopicDeleted = async () => {
-
-    //     let res = await fetch(`${API.TOPICS.GET}/${id}/MainTopicDeleted`, { method: 'GET' });
-    //     let data = await res.json();
-
-    //     SetMainTopicDeleted(data);
-    // }
-
 
 
     const LoadComments = async () => {
@@ -57,14 +48,6 @@ const MessagePage = (props) => {
     }
 
 
-
-    // const LoadCommentsDeletedByTopic = async () => {
-
-    //     let res = await fetch(`${API.COMMENTS.GET}/${id}/commentsDeletedByTopic`, { method: 'GET' });
-    //     let data = await res.json();
-
-    //     SetCommentsDeleted(data);
-    // }
 
 
 
@@ -95,7 +78,6 @@ const MessagePage = (props) => {
 
         try {
             let publishBy = userData.User_code;
-            swal("Added a comment successfully!", "", "success");
             let d = new Date();
 
             let user = {
@@ -112,6 +94,8 @@ const MessagePage = (props) => {
                 },
                 body: JSON.stringify(user)
             });
+
+            swal("Added a comment successfully!", "", "success");
             window.location.reload(false); // רענון דף
             let data = await res.json()
             console.log(data)
@@ -127,8 +111,6 @@ const MessagePage = (props) => {
     useEffect(() => {
         LoadTopics();
         LoadComments();
-        //LoadMainTopicDeleted();
-        //LoadCommentsDeletedByTopic();
     }, [])
 
 
@@ -202,37 +184,6 @@ const MessagePage = (props) => {
                         </div>
                     )}
 
-
-
-                    {/* {mainTopicDeleted.map(maintopicdeleted => {
-
-                            <div className="body">
-
-                                <div className="authors">
-
-                                    <NavLink to={`/UserInfo/${maintopicdeleted.Publish_by}`}>
-                                        <img src={maintopicdeleted.Photo} alt="" height="140px" width="110" />
-                                    </NavLink>
-
-                                    <div className="username"
-                                        style={{ textDecoration: "none", color: "#28a745", fontSize: "17px" }}>
-                                        {maintopicdeleted.First_name} {maintopicdeleted.Last_name}, {maintopicdeleted.City}</div>
-
-                                    <div className="date"
-                                        style={{ textDecoration: "none", color: "#6b6b6b" }}>
-                                        Date Publish: <p>{maintopicdeleted.Date_published}</p></div>
-
-                                </div>
-
-                                <div className="content">
-                                    {maintopicdeleted.Topic_text}
-                                </div>
-
-                            </div>
-                        
-                    } */}
-
-
                 </div>
 
 
@@ -261,33 +212,7 @@ const MessagePage = (props) => {
                 )}
 
 
-                {/* {commentsDeleted.map(commentdeleted => {
-
-                    <div class="body">
-
-                        <div class="authors">
-                            <div class="username">
-                                <NavLink to={`/UserInfo/${commentdeleted.Publish_by}`}>
-                                    <img src={commentdeleted.Photo} alt="" height="140px" width="110" />
-                                </NavLink>
-                                <div className="username"
-                                    style={{ textDecoration: "none", color: "#6b6b6b", fontSize: "15px" }}>
-                                    {commentdeleted.First_name} {commentdeleted.Last_name}, {commentdeleted.City} </div>
-
-                                <div className="date">Date Publish: <p>{commentdeleted.Date_published}</p></div>
-                            </div>
-                        </div>
-
-                        <div class="content">
-                            {commentdeleted.Comment}
-                        </div>
-                    </div>
-                } */}
-
-
-
-
-
+             
 
                 <div className="comment-area hide" id="comment-area" >
                     <textarea name="comment" id="" placeholder="comment here ... "
@@ -339,7 +264,7 @@ const MessagePage = (props) => {
                     <div className="head">
 
                         <div className="authors">Author</div>
-                        <div className="content">Topic: random topic</div>
+                        <div className="content">Topic: </div>
 
                     </div>
 
@@ -368,38 +293,8 @@ const MessagePage = (props) => {
 
                         </div>
                     )}
-
-
-
-
-                    {/* {mainTopicDeleted.map(maintopicdeleted =>
-                        <div className="body">
-
-                            <div className="authors">
-
-                                <NavLink to={`/UserInfo/${maintopicdeleted.Publish_by}`}>
-                                    <img src={maintopicdeleted.Photo} alt="" height="140px" width="110" />
-                                </NavLink>
-
-                                <div className="username"
-                                    style={{ textDecoration: "none", color: "#28a745", fontSize: "17px" }}>
-                                    {maintopicdeleted.First_name} {maintopicdeleted.Last_name}, {maintopicdeleted.City}</div>
-
-                                <div className="date"
-                                    style={{ textDecoration: "none", color: "#6b6b6b" }}>
-                                    Date Publish: <p>{maintopicdeleted.Date_published}</p></div>
-
-                            </div>
-
-                            <div className="content">
-                                {maintopicdeleted.Topic_text}
-                            </div>
-
-                        </div>
-                    )} */}
-
-
                 </div>
+
 
 
                 {comments.map(comment =>
@@ -426,39 +321,11 @@ const MessagePage = (props) => {
 
 
 
-
-                {/* 
-                {/* {commentsDeleted.map(commentdeleted =>
-                    <div className="body">
-
-                        <div className="authors">
-                            <div className="username">
-                                <NavLink to={`/UserInfo/${commentdeleted.Publish_by}`}>
-                                    <img src={commentdeleted.Photo} alt="" height="140px" width="110" />
-                                </NavLink>
-                                <div className="username"
-                                    style={{ textDecoration: "none", color: "#6b6b6b", fontSize: "15px" }}>
-                                    {commentdeleted.First_name} {commentdeleted.Last_name}, {commentdeleted.City} </div>
-
-                                <div className="date">Date Publish: <p>{commentdeleted.Date_published}</p></div>
-                            </div>
-                        </div>
-
-                        <div className="content">
-                            {commentdeleted.Comment}
-                        </div>
-                    </div> 
-                )}  */}
-
-
                 <div className="connectuser">
                     <p>You need to <a href="/Login">login</a> or <a href="/Register">register</a> to post a comment.</p>
                 </div>
-
-
             </div>
         );
-
     }
 }
 

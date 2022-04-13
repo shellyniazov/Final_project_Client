@@ -21,6 +21,7 @@ const UpdateNewPassword = (props) => {
 
 
 
+    // כדי להציג את שם המשתמש בכותרת
     const LoadInfo = async () => {
 
         let res = await fetch(`${API.USERS.GET}/${id}`, { method: 'GET' });

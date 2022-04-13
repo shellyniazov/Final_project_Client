@@ -1,4 +1,4 @@
-import { Button, Form, Col, Row } from 'react-bootstrap'
+import { Button, Form } from 'react-bootstrap'
 import '../style/MessagePage_CommunityPage.css';
 import { useEffect, useState } from 'react';
 import { API } from '../API';
@@ -21,7 +21,7 @@ const UpdateCategory = (props) => {
     let { id } = useParams();
 
 
-
+    // הצגה של ערכי הנתונים הקודמים בשדות של עדכון קטגוריה
     const LoadCategory = async () => {
 
         let res = await fetch(`${API.CATEGORIES.GET}/${id}`, { method: 'GET' });

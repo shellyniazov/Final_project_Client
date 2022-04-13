@@ -1,12 +1,11 @@
-import { Button } from 'react-bootstrap'
+import { Button, Form } from 'react-bootstrap'
 import '../style/MessagePage_CommunityPage.css';
 import { NavLink } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { API } from '../API';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal'
 import React from 'react';
-import { Form } from 'react-bootstrap';
 import swal from 'sweetalert';
 
 
@@ -22,10 +21,9 @@ const CommunityPage = (props) => {
     const [TopicTitle, setTopicTitle] = useState(''); //input
     const [TopicText, setTopicText] = useState('');
 
-    const [titleCategory, SetTitleCategory] = useState([]);
+    const [titleCategory, SetTitleCategory] = useState([]); //כותרת בתחילה העמוד - איזה קטגוריה באותו דף אשכול
 
     const [topics, SetTopics] = useState([]);
-    //const [topicsDeleted, SetTopicsDeleted] = useState([]);
 
     let { id } = useParams();
     let Category_code = id;
@@ -36,20 +34,13 @@ const CommunityPage = (props) => {
     // פונקציה הטוענת אשכול מסוים לפי קטגוריה מסוימת אליה הוא משתייך
     const LoadTopics = async () => {
 
-        let res = await fetch(`${API.CATEGORIES.GET}/${id}/topics`, { method: 'GET' });
+        let res = await fetch(`${API.CATEGORIES.GET}/${Category_code}/topics`, { method: 'GET' });
         let data = await res.json();
 
         SetTopics(data);
     }
 
 
-    // const LoadTopicsDeletedByCategory = async () => {
-
-    //     let res = await fetch(`${API.CATEGORIES.GET}/${id}/topicsDeletdByCategory`, { method: 'GET' });
-    //     let data = await res.json();
-
-    //     SetTopicsDeleted(data);
-    // }
 
 
     // טיפול בשגיאות - אם השדות של הוספת אשכול ריקים
@@ -80,7 +71,6 @@ const CommunityPage = (props) => {
         try {
             let Publish_by = userData.User_code;
 
-            swal("Added a topic successfully!", "", "success");
             let d = new Date(); // הגדרת משתנה לתאריך
 
             let user = {
@@ -99,6 +89,8 @@ const CommunityPage = (props) => {
                 body: JSON.stringify(user)
             });
 
+            swal("Added a topic successfully!", "", "success");
+
             window.location.reload(false); // רענון דף
             let data = await res.json()
             console.log(data)
@@ -113,7 +105,7 @@ const CommunityPage = (props) => {
     // פונקציה האחראית על הצגה של שם הקטגוריה הספציפית שרואים כעת את האשכולים שלה -> דף אשכול
     const LoadCategory = async () => {
 
-        let res = await fetch(`${API.CATEGORIES.GET}/${id}`, { method: 'GET' });
+        let res = await fetch(`${API.CATEGORIES.GET}/${Category_code}`, { method: 'GET' });
         let data = await res.json();
 
         SetTitleCategory(data);
@@ -124,7 +116,6 @@ const CommunityPage = (props) => {
     useEffect(() => {
         LoadTopics();
         LoadCategory();
-        //LoadTopicsDeletedByCategory();
     }, [])
 
 
@@ -134,7 +125,7 @@ const CommunityPage = (props) => {
 
         <div className="posts-table">
 
-            {titleCategory.map(topic =>
+            {titleCategory.map(title =>
 
                 <div className="titlePageCommunity">
                     <p>
@@ -147,9 +138,9 @@ const CommunityPage = (props) => {
                             />
                         </NavLink>
 
-                          Community Page {'> '}
+                        Community Page {'> '}
 
-                        {topic.Name_category}
+                        {title.Name_category}
                     </p>
 
                     <Button variant="success" size="sm"
@@ -230,97 +221,51 @@ const CommunityPage = (props) => {
 
 
             {
-                topics.map(topic =>
+                topics.map(topic => 
 
-                    <div className="table-row" >
+            <div className="table-row">
 
-                        <div className="status">
-                            <img
-                                src={topic.Photo}
-                                alt="Profile" />
-                        </div>
+                <div className="status">
+                    <img
+                        src={topic.Photo}
+                        alt="Profile" />
+                </div>
 
-                        <div className="subjects">
+                <div className="subjects">
 
-                            <NavLink to=
-                                {`/MessagePage/${topic.Serial_code}`}
-                                style={{ textDecoration: "none", color: "green", fontSize: "18px" }}>
-                                {topic.Topic_title}
-                            </NavLink>
-                            <br />
+                    <NavLink to=
+                        {`/MessagePage/${topic.Serial_code}`}
+                        style={{ textDecoration: "none", color: "green", fontSize: "18px" }}>
+                        {topic.Topic_title}
+                    </NavLink>
+                    <br />
 
-                            <span
-                                style={{ textDecoration: "none", color: "black", fontSize: "13px" }}>
-                                Started by
-                                <b> {topic.First_name} {topic.Last_name}</b>
-                            </span>
-                        </div>
+                    <span
+                        style={{ textDecoration: "none", color: "black", fontSize: "13px" }}>
+                        Started by
+                        <b> {topic.First_name} {topic.Last_name}</b>
+                    </span>
+                </div>
 
-                        <div className="replies">
-                            {topic.Count_Comments}
-                        </div>
+                <div className="replies">
+                    {topic.Count_Comments}
+                </div>
 
-                        <div className="datePublish">
-                            {topic.Date_published}
-                        </div>
+                <div className="datePublish">
+                    {topic.Date_published}
+                </div>
 
-                    </div>
-                )
-
+            </div>
+            )
+            
             }
 
-            {
-                // topicsDeleted.map(topicsdeleted =>
-
-                //     <div className="table-row" >
-
-                //         <div class="status">
-                //             <img
-                //                 src={topicsdeleted.Photo}
-                //                 alt="Profile" />
-                //         </div>
-
-                //         <div className="subjects">
-
-                //             <NavLink to=
-                //                 {`/MessagePage/${topicsdeleted.Serial_code}`}
-                //                 style={{ textDecoration: "none", color: "green", fontSize: "18px" }}>
-                //                 {topicsdeleted.Topic_title}
-                //             </NavLink>
-                //             <br />
-
-                //             <span
-                //                 style={{ textDecoration: "none", color: "black", fontSize: "13px" }}>
-                //                 Started by
-                //                 <b> {topicsdeleted.First_name} {topicsdeleted.Last_name}</b>
-                //             </span>
-                //         </div>
-
-                //         <div className="replies">
-                //             {topicsdeleted.Count_Comments}
-                //         </div>
-
-                //         <div className="datePublish">
-                //             {topicsdeleted.Date_published}
-                //         </div>
-
-                //     </div>
-                // )
-
-
-            }
 
             <br></br>
             <br></br>
             <br></br>
             <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
+
 
         </div >
     );

@@ -1,5 +1,5 @@
 import '../style/admin.css';
-import { Button, Form, Col, Row, Tab, Tabs, Table } from 'react-bootstrap'
+import { Button, Form, Tab, Tabs, Table } from 'react-bootstrap'
 import { API } from '../API';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -11,6 +11,7 @@ const Admin = (props) => {
 
   let history = useHistory();
 
+  // הוספת קטגוריה רק מהאדמין
   const [NameCategory, setNameCategory] = useState('');
   const [Photo, setPhoto] = useState('');
 
@@ -193,9 +194,7 @@ const Admin = (props) => {
 
   // התנתקות משתמש אדמין
   const logout = (event) => {
-    event.preventDefault(); //ביטול ניקוי הטופס באופן דיפולטיבי
     sessionStorage.clear();
-
     history.push("/");
     window.location.reload(false); // רענון דף
   }
@@ -217,6 +216,26 @@ const Admin = (props) => {
 
 
 
+
+
+  const checkAddCategoryFiled = async () => {
+
+    if (NameCategory == '' || !Photo) {
+      swal("Stop", "You need to fill in all the fields!", "warning");
+      return;
+    }
+
+    else {
+      uploadImage();
+      swal("Successfully added a category!", "", "success");
+      window.location.reload(false); // רענון דף
+    }
+  }
+
+
+
+
+
   const uploadImage = async () => {
     try {
       const form = new FormData();
@@ -234,22 +253,6 @@ const Admin = (props) => {
     }
   }
 
-
-
-
-  const checkAddCategoryFiled = async () => {
-
-    if (NameCategory == '' || !Photo) {
-      swal("Stop", "You need to fill in all the fields!", "warning");
-      return;
-    }
-
-    else {
-      uploadImage();
-      swal("Successfully added a category!", "", "success");
-      window.location.reload(false); // רענון דף
-    }
-  }
 
 
 

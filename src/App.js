@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom"; // מאפשר העברה בין מסכים
 import React from 'react';
 import Menu from "./components/menu";
 import Footer from "./components/footer";

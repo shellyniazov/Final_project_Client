@@ -111,7 +111,7 @@ const Menu = () => {
                 width="36"
                 height="36"
                 style={{ cursor: "pointer" }}
-                className="d-inline-block align-top"
+                class="d-inline-block align-top"
                 alt="Profile"
                 onClick={checkProfile}
               />
@@ -175,7 +175,7 @@ const Menu = () => {
                 width="50"
                 height="50"
                 style={{ cursor: "pointer", borderRadius: "50%", border: "2px solid grey" }}
-                className="d-inline-block align-top"
+                class="d-inline-block align-top"
                 alt="Profile"
                 onClick={checkProfile}
 

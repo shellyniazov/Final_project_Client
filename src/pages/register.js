@@ -36,7 +36,7 @@ const Register = (props) => {
     }
 
 
-
+    // === לעומת == גם מתייחס לסוג המשתנים ולא רק לערך שלהם כמו ב ==
     if (Password === ConfirmPassword && Password.length >= 8 && Password.length <= 12) { //אם הסיסמאות זהות ניתן להירשם
       setValidated(true);
       uploadImage();
@@ -66,7 +66,7 @@ const Register = (props) => {
   const uploadImage = async () => { //העלאת תמונה
     try {
       const form = new FormData();
-      form.append("photo", file);
+      form.append("photo", file); //הוספת קובץ
       let res = await fetch(API.USERS.UPLOAD, {
         method: 'POST',
         body: form
@@ -105,7 +105,7 @@ const Register = (props) => {
         },
         body: JSON.stringify(user)
       });
-      let data = await res.json();
+      // let data = await res.json();
 
     } catch (error) {
       console.log(error)
